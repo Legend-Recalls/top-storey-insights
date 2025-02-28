@@ -6,8 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [propertySearchQuery, setPropertySearchQuery] = useState("");
   const [cityFilter, setCityFilter] = useState("All Cities");
+  const [propertyTypeFilter, setPropertyTypeFilter] = useState("Property Type");
+  const [priceRangeFilter, setPriceRangeFilter] = useState("Price Range");
   const [showArticleSearch, setShowArticleSearch] = useState(false);
   const [articleSearchQuery, setArticleSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("Property Insights");
@@ -123,6 +125,16 @@ const Index = () => {
         (activeTab === "Property Insights" && article.category.includes("Property"))
       );
 
+  const handlePropertySearch = () => {
+    console.log('Searching properties with:', {
+      query: propertySearchQuery,
+      city: cityFilter,
+      propertyType: propertyTypeFilter,
+      priceRange: priceRangeFilter
+    });
+    // Add actual search logic here
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -168,26 +180,18 @@ const Index = () => {
               Discover premium insights on real estate trends, investment opportunities, and your next dream home.
             </motion.p>
             <motion.div 
-              className="flex flex-col sm:flex-row justify-center gap-4 mb-8"
+              className="flex justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1 }}
             >
-              <div className="relative flex-1 max-w-md mx-auto sm:mx-0">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-neutral-400" />
-                </div>
-                <input
-                  type="text"
-                  className="pl-10 block w-full rounded-l-lg border-0 py-3 text-neutral-900 shadow-sm ring-1 ring-inset ring-neutral-300 placeholder:text-neutral-400 focus:ring-2 focus:ring-inset focus:ring-neutral-600"
-                  placeholder="Search for properties, articles, insights..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <button className="bg-neutral-900 hover:bg-neutral-800 text-white py-3 px-6 rounded-r-lg flex items-center justify-center transition-all duration-300 ease-in-out transform hover:translate-y-[-2px] shadow-md">
-                Search
-              </button>
+              <Link 
+                to="#dream-home"
+                className="bg-white hover:bg-neutral-100 text-neutral-900 py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 shadow-md"
+              >
+                <Search className="mr-2 h-5 w-5" />
+                <span>Find Your Dream Home</span>
+              </Link>
             </motion.div>
           </div>
         </motion.div>
@@ -432,6 +436,7 @@ const Index = () => {
 
         {/* Find Your Dream Home */}
         <motion.section 
+          id="dream-home"
           variants={staggerContainer}
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
@@ -442,46 +447,73 @@ const Index = () => {
             <p className="text-neutral-600">Discover properties that match your criteria and preferences.</p>
           </motion.div>
           
-          <motion.div variants={fadeInUp} className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="flex-1">
-              <select 
-                className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
-                value={cityFilter}
-                onChange={(e) => setCityFilter(e.target.value)}
+          <motion.div variants={fadeInUp} className="space-y-6">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-neutral-400" />
+              </div>
+              <input
+                type="text"
+                className="pl-12 block w-full rounded-lg border border-neutral-200 py-3 text-neutral-900 shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
+                placeholder="Search for properties by location, name, or features..."
+                value={propertySearchQuery}
+                onChange={(e) => setPropertySearchQuery(e.target.value)}
+              />
+            </div>
+            
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1">
+                <select 
+                  className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
+                  value={cityFilter}
+                  onChange={(e) => setCityFilter(e.target.value)}
+                >
+                  <option>All Cities</option>
+                  <option>New York</option>
+                  <option>Los Angeles</option>
+                  <option>Chicago</option>
+                  <option>San Francisco</option>
+                </select>
+              </div>
+              <div className="flex-1">
+                <select 
+                  className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
+                  value={propertyTypeFilter}
+                  onChange={(e) => setPropertyTypeFilter(e.target.value)}
+                >
+                  <option>Property Type</option>
+                  <option>Apartment</option>
+                  <option>Villa</option>
+                  <option>Bungalow</option>
+                  <option>Plot</option>
+                </select>
+              </div>
+              <div className="flex-1">
+                <select 
+                  className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
+                  value={priceRangeFilter}
+                  onChange={(e) => setPriceRangeFilter(e.target.value)}
+                >
+                  <option>Price Range</option>
+                  <option>$100k - $300k</option>
+                  <option>$300k - $500k</option>
+                  <option>$500k - $800k</option>
+                  <option>$800k+</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-center mt-4">
+              <motion.button 
+                className="bg-neutral-900 text-white py-3 px-8 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-neutral-800 shadow-md"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handlePropertySearch}
               >
-                <option>All Cities</option>
-                <option>New York</option>
-                <option>Los Angeles</option>
-                <option>Chicago</option>
-                <option>San Francisco</option>
-              </select>
+                <Search className="mr-2 h-5 w-5" />
+                <span>Search Properties</span>
+              </motion.button>
             </div>
-            <div className="flex-1">
-              <select className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent">
-                <option>Property Type</option>
-                <option>Apartment</option>
-                <option>Villa</option>
-                <option>Bungalow</option>
-                <option>Plot</option>
-              </select>
-            </div>
-            <div className="flex-1">
-              <select className="w-full py-3 px-4 bg-white rounded-lg border border-neutral-200 focus:ring-2 focus:ring-neutral-600 focus:border-transparent">
-                <option>Price Range</option>
-                <option>$100k - $300k</option>
-                <option>$300k - $500k</option>
-                <option>$500k - $800k</option>
-                <option>$800k+</option>
-              </select>
-            </div>
-            <motion.button 
-              className="bg-neutral-900 text-white py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 hover:bg-neutral-800"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Search className="mr-2 h-5 w-5" />
-              <span>Search</span>
-            </motion.button>
           </motion.div>
         </motion.section>
 
