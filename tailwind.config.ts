@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -84,13 +85,99 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				fadeIn: {
+					from: {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				fadeInUp: {
+					from: {
+						opacity: '0',
+						transform: 'translateY(20px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				scaleIn: {
+					from: {
+						opacity: '0',
+						transform: 'scale(0.9)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'scale(1)'
+					}
+				},
+				slideInRight: {
+					from: {
+						opacity: '0',
+						transform: 'translateX(30px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'translateX(0)'
+					}
+				},
+				shimmer: {
+					'0%': {
+						backgroundPosition: '-200% 0'
+					},
+					'100%': {
+						backgroundPosition: '200% 0'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fadeIn 0.6s ease-out forwards',
+				'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+				'scale-in': 'scaleIn 0.5s ease-out forwards',
+				'slide-in-right': 'slideInRight 0.5s ease-out forwards',
+				'shimmer': 'shimmer 1.5s infinite'
+			},
+			typography: {
+				DEFAULT: {
+					css: {
+						maxWidth: '100%',
+						img: {
+							borderRadius: '0.5rem',
+							marginTop: '2rem',
+							marginBottom: '2rem',
+						},
+						h2: {
+							marginTop: '3rem',
+							marginBottom: '1.5rem',
+						},
+						p: {
+							color: 'hsl(var(--foreground) / 0.8)',
+						},
+						strong: {
+							color: 'hsl(var(--foreground))',
+							fontWeight: '600',
+						},
+						ul: {
+							marginTop: '1.5rem',
+							marginBottom: '1.5rem',
+						},
+						li: {
+							marginBottom: '0.5rem',
+						}
+					}
+				}
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [
+		require("tailwindcss-animate"),
+		require('@tailwindcss/typography'),
+	],
 } satisfies Config;
