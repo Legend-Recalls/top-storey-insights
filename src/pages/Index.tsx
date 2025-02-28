@@ -13,6 +13,7 @@ const Index = () => {
   const [showArticleSearch, setShowArticleSearch] = useState(false);
   const [articleSearchQuery, setArticleSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("Property Insights");
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
   useEffect(() => {
     // Simulate loading delay
@@ -20,6 +21,14 @@ const Index = () => {
       setIsLoaded(true);
     }, 500);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Cycle through recent news items
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentNewsIndex(prev => (prev + 1) % recentNews.length);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const fadeInUp = {
@@ -43,6 +52,14 @@ const Index = () => {
       }
     }
   };
+
+  // Recent news for the header
+  const recentNews = [
+    "Market Insight: Property prices in urban centers rise by 12% this quarter",
+    "New mixed-use development announced in downtown area: 340 residential units",
+    "Sustainability focus: Green building certifications becoming standard for new developments",
+    "Rental market report: Demand for 3-bedroom homes increases by 22%"
+  ];
 
   // Mock data
   const featuredArticles = [
@@ -137,15 +154,46 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
+      {/* Hero Section - Slimmer and more beautiful */}
       <motion.header 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative h-[70vh] overflow-hidden bg-gradient-to-r from-neutral-900 to-neutral-800"
+        className="relative h-[50vh] overflow-hidden bg-gradient-to-r from-neutral-900 to-neutral-800"
       >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+        
+        {/* Floating gradient circles for visual interest */}
+        <motion.div 
+          className="absolute top-[20%] left-[10%] w-64 h-64 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-3xl"
+          animate={{ 
+            x: [0, 10, 0], 
+            y: [0, 15, 0], 
+            scale: [1, 1.1, 1] 
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 15, 
+            ease: "easeInOut" 
+          }}
+        ></motion.div>
+        
+        <motion.div 
+          className="absolute bottom-[10%] right-[10%] w-72 h-72 rounded-full bg-gradient-to-r from-amber-500/20 to-pink-500/20 blur-3xl"
+          animate={{ 
+            x: [0, -15, 0], 
+            y: [0, 10, 0], 
+            scale: [1, 1.15, 1] 
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 18, 
+            ease: "easeInOut",
+            delay: 1 
+          }}
+        ></motion.div>
+        
         <motion.div 
           className="container mx-auto px-4 h-full flex items-center justify-center relative z-10"
           initial={{ opacity: 0, y: 30 }}
@@ -172,26 +220,33 @@ const Index = () => {
               TOP STOREY
             </motion.h1>
             <motion.p 
-              className="text-xl text-neutral-200 mb-8 max-w-2xl mx-auto leading-relaxed"
+              className="text-xl text-neutral-200 mb-4 max-w-2xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
             >
               Discover premium insights on real estate trends, investment opportunities, and your next dream home.
             </motion.p>
+            
+            {/* Animated news ticker */}
             <motion.div 
-              className="flex justify-center"
+              className="mt-8 h-8 overflow-hidden relative bg-white/10 backdrop-blur-md rounded-lg py-1 px-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1 }}
             >
-              <Link 
-                to="#dream-home"
-                className="bg-white hover:bg-neutral-100 text-neutral-900 py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 shadow-md"
-              >
-                <Search className="mr-2 h-5 w-5" />
-                <span>Find Your Dream Home</span>
-              </Link>
+              <AnimatePresence mode="wait">
+                <motion.p 
+                  key={currentNewsIndex}
+                  className="text-white text-sm font-medium absolute inset-0 flex items-center justify-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {recentNews[currentNewsIndex]}
+                </motion.p>
+              </AnimatePresence>
             </motion.div>
           </div>
         </motion.div>
