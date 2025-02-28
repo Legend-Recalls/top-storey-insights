@@ -1,13 +1,16 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Search, MapPin, Home, Building, PenSquare, TrendingUp, ChevronRight, Clock } from "lucide-react";
+import { ArrowRight, Search, MapPin, Home, Building, PenSquare, TrendingUp, ChevronRight, Clock, X, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cityFilter, setCityFilter] = useState("All Cities");
+  const [showArticleSearch, setShowArticleSearch] = useState(false);
+  const [articleSearchQuery, setArticleSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("Property Insights");
 
   useEffect(() => {
     // Simulate loading delay
@@ -103,6 +106,23 @@ const Index = () => {
     }
   ];
 
+  // Filter articles based on search query
+  const filteredArticles = articleSearchQuery
+    ? featuredArticles.filter(article => 
+        article.title.toLowerCase().includes(articleSearchQuery.toLowerCase()) ||
+        article.excerpt.toLowerCase().includes(articleSearchQuery.toLowerCase()) ||
+        article.category.toLowerCase().includes(articleSearchQuery.toLowerCase())
+      )
+    : featuredArticles;
+
+  // Filter articles based on active tab
+  const tabFilteredArticles = activeTab === "All" 
+    ? filteredArticles 
+    : filteredArticles.filter(article => 
+        article.category === activeTab || 
+        (activeTab === "Property Insights" && article.category.includes("Property"))
+      );
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -181,12 +201,91 @@ const Index = () => {
         transition={{ duration: 0.5, delay: 1.2 }}
       >
         <div className="container mx-auto px-4">
-          <div className="flex overflow-x-auto py-4 gap-1 scrollbar-hide">
-            <NavTab title="Property Insights" icon={<PenSquare className="w-4 h-4" />} active />
-            <NavTab title="Recommended Properties" icon={<Home className="w-4 h-4" />} />
-            <NavTab title="Expert Articles" icon={<Building className="w-4 h-4" />} />
-            <NavTab title="Events" icon={<TrendingUp className="w-4 h-4" />} />
+          <div className="flex justify-between items-center">
+            <div className="flex overflow-x-auto py-4 gap-1 scrollbar-hide">
+              <NavTab 
+                title="Property Insights" 
+                icon={<PenSquare className="w-4 h-4" />} 
+                active={activeTab === "Property Insights"} 
+                onClick={() => setActiveTab("Property Insights")}
+              />
+              <NavTab 
+                title="Recommended Properties" 
+                icon={<Home className="w-4 h-4" />} 
+                active={activeTab === "Recommended Properties"} 
+                onClick={() => setActiveTab("Recommended Properties")}
+              />
+              <NavTab 
+                title="Expert Articles" 
+                icon={<Building className="w-4 h-4" />} 
+                active={activeTab === "Expert Articles"} 
+                onClick={() => setActiveTab("Expert Articles")}
+              />
+              <NavTab 
+                title="Events" 
+                icon={<TrendingUp className="w-4 h-4" />} 
+                active={activeTab === "Events"} 
+                onClick={() => setActiveTab("Events")}
+              />
+            </div>
+            
+            {/* Article Search Button */}
+            <motion.button 
+              className="py-2 px-3 rounded-full flex items-center text-sm font-medium text-neutral-600 hover:bg-neutral-100 transition-all duration-300"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowArticleSearch(!showArticleSearch)}
+            >
+              <Search className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Search Articles</span>
+            </motion.button>
           </div>
+          
+          {/* Article Search Panel */}
+          <AnimatePresence>
+            {showArticleSearch && (
+              <motion.div 
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden pb-4"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="relative flex-1">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Search className="h-5 w-5 text-neutral-400" />
+                    </div>
+                    <input
+                      type="text"
+                      className="pl-10 pr-10 block w-full rounded-lg border border-neutral-200 py-2 text-neutral-900 shadow-sm placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-600 focus:border-transparent"
+                      placeholder="Search for articles by title, category, or content..."
+                      value={articleSearchQuery}
+                      onChange={(e) => setArticleSearchQuery(e.target.value)}
+                    />
+                    {articleSearchQuery && (
+                      <button 
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-neutral-400 hover:text-neutral-600"
+                        onClick={() => setArticleSearchQuery("")}
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    )}
+                  </div>
+                  <button className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300">
+                    <Filter className="h-4 w-4" />
+                    <span className="hidden sm:inline">Filters</span>
+                  </button>
+                  <button 
+                    className="text-neutral-500 hover:text-neutral-700"
+                    onClick={() => setShowArticleSearch(false)}
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -210,51 +309,63 @@ const Index = () => {
           </motion.h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredArticles.map((article, index) => (
-              <motion.div
-                key={article.id}
-                variants={fadeInUp}
-                className="group"
-              >
-                <Link to={`/article/${article.id}`} className="block">
-                  <div className="mb-4 overflow-hidden rounded-lg relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
-                    <motion.div 
-                      className="absolute bottom-4 left-4 z-20"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <span className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-white text-xs font-medium">
-                        {article.category}
-                      </span>
-                    </motion.div>
-                    <motion.img
-                      src={article.image}
-                      alt={article.title}
-                      className="w-full h-64 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.5 }}
-                    />
-                  </div>
-                  <div>
-                    <div className="flex items-center text-sm text-neutral-500 mb-2">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>{article.date}</span>
-                      <span className="mx-2">•</span>
-                      <span>{article.readTime}</span>
+            {tabFilteredArticles.length > 0 ? (
+              tabFilteredArticles.map((article, index) => (
+                <motion.div
+                  key={article.id}
+                  variants={fadeInUp}
+                  className="group"
+                >
+                  <Link to={`/article/${article.id}`} className="block">
+                    <div className="mb-4 overflow-hidden rounded-lg relative">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                      <motion.div 
+                        className="absolute bottom-4 left-4 z-20"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <span className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-white text-xs font-medium">
+                          {article.category}
+                        </span>
+                      </motion.div>
+                      <motion.img
+                        src={article.image}
+                        alt={article.title}
+                        className="w-full h-64 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
+                      />
                     </div>
-                    <h3 className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">
-                      {article.title}
-                    </h3>
-                    <p className="text-neutral-600 line-clamp-2">{article.excerpt}</p>
-                    <div className="mt-4 flex items-center text-neutral-800 font-medium group-hover:text-neutral-600 transition-colors">
-                      <span>Read more</span>
-                      <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    <div>
+                      <div className="flex items-center text-sm text-neutral-500 mb-2">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>{article.date}</span>
+                        <span className="mx-2">•</span>
+                        <span>{article.readTime}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">
+                        {article.title}
+                      </h3>
+                      <p className="text-neutral-600 line-clamp-2">{article.excerpt}</p>
+                      <div className="mt-4 flex items-center text-neutral-800 font-medium group-hover:text-neutral-600 transition-colors">
+                        <span>Read more</span>
+                        <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  </Link>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-3 py-12 text-center">
+                <div className="text-neutral-400 mb-4">
+                  <Search className="h-12 w-12 mx-auto" />
+                </div>
+                <h3 className="text-xl font-medium text-neutral-800 mb-2">No articles found</h3>
+                <p className="text-neutral-600 max-w-md mx-auto">
+                  We couldn't find any articles matching your search criteria. Try using different keywords or browse all our articles.
+                </p>
+              </div>
+            )}
           </div>
         </motion.section>
 
@@ -454,7 +565,7 @@ const Index = () => {
   );
 };
 
-const NavTab = ({ title, icon, active = false }) => {
+const NavTab = ({ title, icon, active = false, onClick }) => {
   return (
     <motion.button
       className={`flex items-center whitespace-nowrap px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
@@ -464,11 +575,14 @@ const NavTab = ({ title, icon, active = false }) => {
       }`}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
+      onClick={onClick}
     >
       <span className="mr-2">{icon}</span>
       <span>{title}</span>
     </motion.button>
   );
 };
+
+const AnimatePresence = motion.AnimatePresence;
 
 export default Index;
