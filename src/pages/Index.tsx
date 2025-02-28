@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Search, MapPin, Home, Building, PenSquare, TrendingUp, ChevronRight, Clock, X, Filter } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -582,7 +582,5 @@ const NavTab = ({ title, icon, active = false, onClick }) => {
     </motion.button>
   );
 };
-
-const AnimatePresence = motion.AnimatePresence;
 
 export default Index;
