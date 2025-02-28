@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { 
   PenSquare, Save, Image, X, ChevronDown, Home, FileText, Users, Settings, LogOut, 
-  Newspaper, BarChart2, Eye, Trash2, Plus, Search, Calendar, AlertCircle 
+  Newspaper, BarChart2, Eye, Trash2, Plus, Search, Calendar, AlertCircle, Clock 
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
