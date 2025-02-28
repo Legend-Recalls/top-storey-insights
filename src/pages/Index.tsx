@@ -26,7 +26,7 @@ const Index = () => {
   // Cycle through recent news items
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentNewsIndex(prev => (prev + 1) % recentNews.length);
+      setCurrentNewsIndex(prev => (prev + 1) % recentArticles.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -53,15 +53,41 @@ const Index = () => {
     }
   };
 
-  // Recent news for the header
-  const recentNews = [
-    "Market Insight: Property prices in urban centers rise by 12% this quarter",
-    "New mixed-use development announced in downtown area: 340 residential units",
-    "Sustainability focus: Green building certifications becoming standard for new developments",
-    "Rental market report: Demand for 3-bedroom homes increases by 22%"
+  // Get today's date for comparison
+  const today = new Date();
+  const oneWeekAgo = new Date(today);
+  oneWeekAgo.setDate(today.getDate() - 7);
+
+  // Recent articles for the ticker
+  const recentArticles = [
+    {
+      id: 1,
+      title: "The Future of Mixed-Use Development in Urban Areas",
+      date: new Date(2023, 4, 21), // May 21, 2023
+    },
+    {
+      id: 2,
+      title: "Group Housing: The New Way to Invest",
+      date: new Date(2023, 4, 18), // May 18, 2023
+    },
+    {
+      id: 3,
+      title: "Plotted Development: What Buyers Need to Know",
+      date: new Date(2023, 4, 15), // May 15, 2023
+    },
+    {
+      id: 4,
+      title: "5 Market Trends Every Real Estate Investor Should Watch",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1), // yesterday
+    },
+    {
+      id: 5,
+      title: "Sustainable Building Materials Set to Transform Construction Industry",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2), // 2 days ago
+    }
   ];
 
-  // Mock data
+  // Mock data with publication dates and categories
   const featuredArticles = [
     {
       id: 1,
@@ -69,7 +95,7 @@ const Index = () => {
       excerpt: "How mixed-use developments are transforming city centers and creating more sustainable communities",
       image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       category: "Property Insights",
-      date: "May 21, 2023",
+      date: new Date(2023, 4, 21), // May 21, 2023
       readTime: "8 min read"
     },
     {
@@ -78,7 +104,7 @@ const Index = () => {
       excerpt: "Exploring the benefits and potential pitfalls of group housing investment strategies",
       image: "https://images.unsplash.com/photo-1524230572899-a752b3835840?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       category: "Investment",
-      date: "May 18, 2023",
+      date: new Date(2023, 4, 18), // May 18, 2023
       readTime: "6 min read"
     },
     {
@@ -87,8 +113,53 @@ const Index = () => {
       excerpt: "Understanding the intricacies of plotted developments and how to make informed decisions",
       image: "https://images.unsplash.com/photo-1431576901776-e539bd916ba2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       category: "Property Insights",
-      date: "May 15, 2023",
+      date: new Date(2023, 4, 15), // May 15, 2023
       readTime: "10 min read"
+    },
+    {
+      id: 4,
+      title: "5 Market Trends Every Real Estate Investor Should Watch",
+      excerpt: "Stay ahead of the curve with these emerging patterns in the real estate market",
+      image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Market Analysis",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1), // yesterday
+      readTime: "5 min read"
+    },
+    {
+      id: 5,
+      title: "Sustainable Building Materials Set to Transform Construction Industry",
+      excerpt: "How eco-friendly innovations are changing the way we build and their impact on property values",
+      image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Expert Articles",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 2), // 2 days ago
+      readTime: "7 min read"
+    },
+    {
+      id: 6,
+      title: "The Psychology of Home Buying: What Drives Decisions?",
+      excerpt: "Understanding the emotional and logical factors that influence residential property purchases",
+      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Expert Articles",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 4), // 4 days ago
+      readTime: "9 min read"
+    },
+    {
+      id: 7,
+      title: "Property Tech Revolution: How AI is Changing Real Estate",
+      excerpt: "The technological innovations reshaping how we buy, sell, and manage properties",
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Events",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 3), // 3 days ago
+      readTime: "8 min read"
+    },
+    {
+      id: 8,
+      title: "Commercial Real Estate Outlook for Q3 2023",
+      excerpt: "Expert analysis on the trends, challenges, and opportunities in the commercial property sector",
+      image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Market Analysis",
+      date: new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6), // 6 days ago
+      readTime: "11 min read"
     }
   ];
 
@@ -124,6 +195,16 @@ const Index = () => {
       image: "https://images.unsplash.com/photo-1524230572899-a752b3835840?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
+
+  // Format date to display
+  const formatDate = (date) => {
+    return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(date);
+  };
+
+  // Check if an article is new (published within the last week)
+  const isNewArticle = (articleDate) => {
+    return articleDate > oneWeekAgo;
+  };
 
   // Filter articles based on search query
   const filteredArticles = articleSearchQuery
@@ -228,7 +309,7 @@ const Index = () => {
               Discover premium insights on real estate trends, investment opportunities, and your next dream home.
             </motion.p>
             
-            {/* Animated news ticker */}
+            {/* Animated news ticker with article titles */}
             <motion.div 
               className="mt-8 h-8 overflow-hidden relative bg-white/10 backdrop-blur-md rounded-lg py-1 px-4"
               initial={{ opacity: 0, y: 20 }}
@@ -244,7 +325,7 @@ const Index = () => {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {recentNews[currentNewsIndex]}
+                  {recentArticles[currentNewsIndex].title}
                 </motion.p>
               </AnimatePresence>
             </motion.div>
@@ -350,7 +431,7 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-12">
-        {/* Featured Articles */}
+        {/* Featured Articles with Dynamic Grid Layout */}
         <motion.section 
           className="mb-20"
           variants={staggerContainer}
@@ -367,17 +448,78 @@ const Index = () => {
             Latest Property Insights
           </motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {tabFilteredArticles.length > 0 ? (
-              tabFilteredArticles.map((article, index) => (
+          {tabFilteredArticles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Featured article - spans 2 columns */}
+              {tabFilteredArticles.length > 0 && (
+                <motion.div 
+                  variants={fadeInUp}
+                  className="group col-span-1 md:col-span-2 lg:row-span-2 md:row-span-1 bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  <Link to={`/article/${tabFilteredArticles[0].id}`} className="block h-full">
+                    <div className="relative h-64 md:h-72 lg:h-80 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10 z-10"></div>
+                      {isNewArticle(tabFilteredArticles[0].date) && (
+                        <div className="absolute top-4 left-4 z-20">
+                          <span className="inline-block px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
+                            NEW
+                          </span>
+                        </div>
+                      )}
+                      <motion.div 
+                        className="absolute bottom-4 left-4 z-20"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <span className="inline-block px-3 py-1 bg-white/10 backdrop-blur-md rounded-full text-white text-xs font-medium">
+                          {tabFilteredArticles[0].category}
+                        </span>
+                      </motion.div>
+                      <motion.img
+                        src={tabFilteredArticles[0].image}
+                        alt={tabFilteredArticles[0].title}
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    </div>
+                    <div className="p-6">
+                      <div className="flex items-center text-sm text-neutral-500 mb-3">
+                        <Clock className="h-4 w-4 mr-1" />
+                        <span>{formatDate(tabFilteredArticles[0].date)}</span>
+                        <span className="mx-2">•</span>
+                        <span>{tabFilteredArticles[0].readTime}</span>
+                      </div>
+                      <h3 className="text-2xl font-bold text-neutral-900 mb-3 group-hover:text-neutral-700 transition-colors">
+                        {tabFilteredArticles[0].title}
+                      </h3>
+                      <p className="text-neutral-600 mb-4">{tabFilteredArticles[0].excerpt}</p>
+                      <div className="flex items-center text-neutral-800 font-medium group-hover:text-neutral-600 transition-colors">
+                        <span>Read full article</span>
+                        <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
+              )}
+              
+              {/* Regular articles - start from index 1 */}
+              {tabFilteredArticles.slice(1, 7).map((article, index) => (
                 <motion.div
                   key={article.id}
                   variants={fadeInUp}
-                  className="group"
+                  className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
                 >
-                  <Link to={`/article/${article.id}`} className="block">
-                    <div className="mb-4 overflow-hidden rounded-lg relative">
+                  <Link to={`/article/${article.id}`} className="block h-full">
+                    <div className="relative h-48 overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                      {isNewArticle(article.date) && (
+                        <div className="absolute top-4 left-4 z-20">
+                          <span className="inline-block px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">
+                            NEW
+                          </span>
+                        </div>
+                      )}
                       <motion.div 
                         className="absolute bottom-4 left-4 z-20"
                         whileHover={{ scale: 1.05 }}
@@ -390,42 +532,42 @@ const Index = () => {
                       <motion.img
                         src={article.image}
                         alt={article.title}
-                        className="w-full h-64 object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.5 }}
                       />
                     </div>
-                    <div>
+                    <div className="p-4">
                       <div className="flex items-center text-sm text-neutral-500 mb-2">
                         <Clock className="h-4 w-4 mr-1" />
-                        <span>{article.date}</span>
+                        <span>{formatDate(article.date)}</span>
                         <span className="mx-2">•</span>
                         <span>{article.readTime}</span>
                       </div>
-                      <h3 className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">
+                      <h3 className="text-lg font-bold text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors line-clamp-2">
                         {article.title}
                       </h3>
-                      <p className="text-neutral-600 line-clamp-2">{article.excerpt}</p>
-                      <div className="mt-4 flex items-center text-neutral-800 font-medium group-hover:text-neutral-600 transition-colors">
+                      <p className="text-neutral-600 text-sm line-clamp-2">{article.excerpt}</p>
+                      <div className="mt-3 flex items-center text-neutral-800 font-medium group-hover:text-neutral-600 transition-colors text-sm">
                         <span>Read more</span>
                         <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>
                   </Link>
                 </motion.div>
-              ))
-            ) : (
-              <div className="col-span-3 py-12 text-center">
-                <div className="text-neutral-400 mb-4">
-                  <Search className="h-12 w-12 mx-auto" />
-                </div>
-                <h3 className="text-xl font-medium text-neutral-800 mb-2">No articles found</h3>
-                <p className="text-neutral-600 max-w-md mx-auto">
-                  We couldn't find any articles matching your search criteria. Try using different keywords or browse all our articles.
-                </p>
+              ))}
+            </div>
+          ) : (
+            <div className="py-12 text-center">
+              <div className="text-neutral-400 mb-4">
+                <Search className="h-12 w-12 mx-auto" />
               </div>
-            )}
-          </div>
+              <h3 className="text-xl font-medium text-neutral-800 mb-2">No articles found</h3>
+              <p className="text-neutral-600 max-w-md mx-auto">
+                We couldn't find any articles matching your search criteria. Try using different keywords or browse all our articles.
+              </p>
+            </div>
+          )}
         </motion.section>
 
         {/* Properties Slider */}
