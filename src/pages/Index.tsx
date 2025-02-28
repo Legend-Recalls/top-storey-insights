@@ -309,7 +309,7 @@ const Index = () => {
               Discover premium insights on real estate trends, investment opportunities, and your next dream home.
             </motion.p>
             
-            {/* Animated news ticker with article titles */}
+            {/* Animated news ticker with clickable article titles */}
             <motion.div 
               className="mt-8 h-8 overflow-hidden relative bg-white/10 backdrop-blur-md rounded-lg py-1 px-4"
               initial={{ opacity: 0, y: 20 }}
@@ -317,16 +317,22 @@ const Index = () => {
               transition={{ duration: 0.5, delay: 1 }}
             >
               <AnimatePresence mode="wait">
-                <motion.p 
+                <motion.div 
                   key={currentNewsIndex}
-                  className="text-white text-sm font-medium absolute inset-0 flex items-center justify-center"
+                  className="absolute inset-0 flex items-center justify-center"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
                 >
-                  {recentArticles[currentNewsIndex].title}
-                </motion.p>
+                  <Link 
+                    to={`/article/${recentArticles[currentNewsIndex].id}`}
+                    className="text-white text-sm font-medium hover:underline cursor-pointer flex items-center transition-colors duration-300"
+                  >
+                    {recentArticles[currentNewsIndex].title}
+                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </motion.div>
               </AnimatePresence>
             </motion.div>
           </div>
